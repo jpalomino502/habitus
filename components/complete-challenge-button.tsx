@@ -2,8 +2,10 @@
 
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
+import { useRouter } from 'next/navigation'
 
 export function CompleteChallengeButton({ challengeId }: { challengeId: number }) {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -27,6 +29,36 @@ export function CompleteChallengeButton({ challengeId }: { challengeId: number }
     }
     setDone(true)
     setLoading(false)
+
+    const today = new Date().toISOString().slice(0, 10)
+    const { data: userHabits } = await supabase
+      .from('user_habits')
+      .select('habit_id')
+      .eq('user_id', userData.user.id)
+      .eq('active', true)
+    const habitIds = (userHabits || []).map((h) => h.habit_id as number)
+    let nextId: number | null = null
+    if (habitIds.length) {
+      const { data: completedToday } = await supabase
+        .from('challenge_completions')
+        .select('challenge_id')
+        .eq('user_id', userData.user.id)
+        .eq('completed_on', today)
+      const completedIds = new Set((completedToday || []).map((c) => c.challenge_id as number))
+      const { data: candidates } = await supabase
+        .from('challenges')
+        .select('id,habit_id')
+        .eq('active', true)
+        .in('habit_id', habitIds)
+        .order('created_at', { ascending: false })
+      const next = (candidates || []).find((c) => c.id !== challengeId && !completedIds.has(c.id as number))
+      nextId = next ? (next.id as number) : null
+    }
+    if (nextId) {
+      router.push(`/reto/${nextId}`)
+    } else {
+      router.push('/retos')
+    }
   }
 
   return (

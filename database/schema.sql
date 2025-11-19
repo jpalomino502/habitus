@@ -137,3 +137,62 @@ create policy challenge_completions_select_own on public.challenge_completions f
 
 drop policy if exists challenge_completions_insert_own on public.challenge_completions;
 create policy challenge_completions_insert_own on public.challenge_completions for insert with check (user_id = auth.uid());
+
+create table if not exists public.habit_streaks (
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  habit_id bigint not null references public.habits(id) on delete cascade,
+  current_streak_days integer not null default 0,
+  longest_streak_days integer not null default 0,
+  updated_on date,
+  created_at timestamptz not null default now(),
+  primary key (user_id, habit_id)
+);
+
+create or replace function public.update_habit_streak_on_completion()
+returns trigger
+language plpgsql
+as $$
+declare
+  h_id bigint;
+  prev_current integer;
+  prev_longest integer;
+  prev_date date;
+  new_current integer;
+begin
+  select habit_id into h_id from public.challenges where id = new.challenge_id;
+  if h_id is null then
+    return new;
+  end if;
+  select current_streak_days, longest_streak_days, updated_on into prev_current, prev_longest, prev_date
+  from public.habit_streaks where user_id = new.user_id and habit_id = h_id;
+  if prev_date is null then
+    new_current := 1;
+    prev_longest := greatest(prev_longest, new_current);
+    insert into public.habit_streaks(user_id, habit_id, current_streak_days, longest_streak_days, updated_on)
+    values (new.user_id, h_id, new_current, new_current, new.completed_on)
+    on conflict (user_id, habit_id) do update set current_streak_days = excluded.current_streak_days, longest_streak_days = excluded.longest_streak_days, updated_on = excluded.updated_on;
+    return new;
+  end if;
+  if prev_date = new.completed_on then
+    new_current := prev_current;
+  elsif prev_date = new.completed_on - interval '1 day' then
+    new_current := prev_current + 1;
+  else
+    new_current := 1;
+  end if;
+  prev_longest := greatest(prev_longest, new_current);
+  insert into public.habit_streaks(user_id, habit_id, current_streak_days, longest_streak_days, updated_on)
+  values (new.user_id, h_id, new_current, prev_longest, new.completed_on)
+  on conflict (user_id, habit_id) do update set current_streak_days = excluded.current_streak_days, longest_streak_days = excluded.longest_streak_days, updated_on = excluded.updated_on;
+  return new;
+end;
+$$;
+
+drop trigger if exists update_habit_streak_after_completion on public.challenge_completions;
+create trigger update_habit_streak_after_completion
+after insert on public.challenge_completions
+for each row execute function public.update_habit_streak_on_completion();
+
+alter table public.habit_streaks enable row level security;
+drop policy if exists habit_streaks_select_own on public.habit_streaks;
+create policy habit_streaks_select_own on public.habit_streaks for select using (user_id = auth.uid());

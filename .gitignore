@@ -1,0 +1,49 @@
+# Dependencias
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Producción
+.next/
+out/
+build/
+
+# Archivos de entorno
+.env.local
+.env.example
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+*.log.*
+pids
+*.pid
+*.seed
+*.pid.lock
+.tsconfig.tsbuildinfo
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Cobertura de tests
+coverage/
+
+# Base de datos local (si es temporal)
+*.sqlite
+*.db
+
+#logs
+log.txt
+example.txt
+
+#build
+tsconfig.tsbuildinfo

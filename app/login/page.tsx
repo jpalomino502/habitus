@@ -53,7 +53,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm flex flex-col gap-8 p-6 relative z-10">
         <div className="flex flex-col gap-2 text-center">
           <h1 className="text-2xl tracking-tight text-black">Iniciar sesión</h1>
-          <p className="text-sm text-neutral-500">Accede a tu cuenta</p>
+          <p className="text-sm text-neutral-500">Accede a tu cuenta de Habitus</p>
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">

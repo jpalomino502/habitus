@@ -11,6 +11,7 @@ export default function PerfilPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [username, setUsername] = useState('')
   const [points, setPoints] = useState<number>(0)
+  const [overallStreakValue, setOverallStreakValue] = useState<number>(0)
   const [habits, setHabits] = useState<{ id: number; name: string }[]>([])
   const [selected, setSelected] = useState<number[]>([])
   const [loading, setLoading] = useState(true)
@@ -19,71 +20,102 @@ export default function PerfilPage() {
   const [streaks, setStreaks] = useState<Record<number, { current: number; longest: number }>>({})
   const [recent, setRecent] = useState<{ title: string; points: number; completed_at: string }[]>([])
 
-  useEffect(() => {
-    const load = async () => {
-      const { data: userData } = await supabase.auth.getUser()
-      if (!userData.user) {
-        router.push('/login')
-        return
-      }
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('username,points')
-        .eq('id', userData.user.id)
-        .single()
-      setUsername(profile?.username || '')
-      setPoints(profile?.points || 0)
-      const { data: allHabits } = await supabase
-        .from('habits')
-        .select('id,name')
-        .order('name')
-      const { data: userHabits } = await supabase
-        .from('user_habits')
-        .select('habit_id')
-        .eq('user_id', userData.user.id)
-        .eq('active', true)
-      setHabits((allHabits || []) as any)
-      setSelected((userHabits || []).map((uh: any) => uh.habit_id as number))
-      const today = new Date().toISOString().slice(0, 10)
-      const d = new Date()
-      const day = d.getDay()
-      const diff = d.getDate() - day + (day === 0 ? -6 : 1)
-      const start = new Date(d)
-      start.setDate(diff)
-      const startStr = start.toISOString().slice(0, 10)
-      const { data: todayCompletions } = await supabase
-        .from('challenge_completions')
-        .select('id')
-        .eq('user_id', userData.user.id)
-        .eq('completed_on', today)
-      setTodayCount((todayCompletions || []).length)
-      const { data: weekCompletions } = await supabase
-        .from('challenge_completions')
-        .select('id')
-        .eq('user_id', userData.user.id)
-        .gte('completed_on', startStr)
-        .lte('completed_on', today)
-      setWeekCount((weekCompletions || []).length)
-      const { data: streakRows } = await supabase
-        .from('habit_streaks')
-        .select('habit_id,current_streak_days,longest_streak_days')
-        .eq('user_id', userData.user.id)
-      const map: Record<number, { current: number; longest: number }> = {}
-      for (const r of streakRows || []) {
-        map[(r as any).habit_id as number] = { current: (r as any).current_streak_days as number, longest: (r as any).longest_streak_days as number }
-      }
-      setStreaks(map)
-      const { data: rec } = await supabase
-        .from('challenge_completions')
-        .select('completed_at,challenge_id,challenges(title,points_per_completion)')
-        .eq('user_id', userData.user.id)
-        .order('completed_at', { ascending: false })
-        .limit(10)
-      setRecent((rec || []).map((r: any) => ({ title: r.challenges?.title ?? 'Reto', points: r.challenges?.points_per_completion ?? 0, completed_at: r.completed_at })))
-      setLoading(false)
+  const load = async () => {
+    setLoading(true)
+    const { data: userData } = await supabase.auth.getUser()
+    if (!userData.user) {
+      router.push('/login')
+      return
     }
+
+    const userId = userData.user.id
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('username,points,current_streak_days')
+      .eq('id', userId)
+      .single()
+    setUsername(profile?.username || '')
+    setPoints(profile?.points || 0)
+    setOverallStreakValue(profile?.current_streak_days ?? 0)
+
+    const { data: allHabits } = await supabase
+      .from('habits')
+      .select('id,name')
+      .order('name')
+    const { data: userHabits } = await supabase
+      .from('user_habits')
+      .select('habit_id')
+      .eq('user_id', userId)
+      .eq('active', true)
+    setHabits((allHabits || []) as any)
+    setSelected((userHabits || []).map((uh: any) => uh.habit_id as number))
+
+    const today = new Date().toISOString().slice(0, 10)
+    const d = new Date()
+    const day = d.getDay()
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1)
+    const start = new Date(d)
+    start.setDate(diff)
+    const startStr = start.toISOString().slice(0, 10)
+
+    const { data: todayCompletions } = await supabase
+      .from('challenge_completions')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('completed_on', today)
+    setTodayCount((todayCompletions || []).length)
+
+    const { data: weekCompletions } = await supabase
+      .from('challenge_completions')
+      .select('id')
+      .eq('user_id', userId)
+      .gte('completed_on', startStr)
+      .lte('completed_on', today)
+    setWeekCount((weekCompletions || []).length)
+
+    const { data: streakRows } = await supabase
+      .from('habit_streaks')
+      .select('habit_id,current_streak_days,longest_streak_days')
+      .eq('user_id', userId)
+    const map: Record<number, { current: number; longest: number }> = {}
+    for (const r of streakRows || []) {
+      map[(r as any).habit_id as number] = { current: (r as any).current_streak_days as number, longest: (r as any).longest_streak_days as number }
+    }
+    setStreaks(map)
+
+    const { data: rec } = await supabase
+      .from('challenge_completions')
+      .select('completed_at,challenge_id,challenges(title,points_per_completion)')
+      .eq('user_id', userId)
+      .order('completed_at', { ascending: false })
+      .limit(10)
+    setRecent((rec || []).map((r: any) => ({ title: r.challenges?.title ?? 'Reto', points: r.challenges?.points_per_completion ?? 0, completed_at: r.completed_at })))
+
+    setLoading(false)
+  }
+
+  useEffect(() => {
     load()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router])
+
+  useEffect(() => {
+    let bc: BroadcastChannel | null = null
+    try {
+      bc = new BroadcastChannel('habitus')
+      bc.onmessage = (ev) => {
+        if (ev?.data?.type === 'completion') {
+          load()
+        }
+      }
+    } catch (e) {
+      // BroadcastChannel might be unavailable in some environments
+    }
+    return () => {
+      try { bc?.close() } catch (e) {}
+    }
+  }, [])
 
   const filteredHabits = useMemo(() => habits.filter(h => h.name.toLowerCase().includes(searchTerm.toLowerCase())), [habits, searchTerm])
   const selectedHabits = useMemo(() => habits.filter(h => selected.includes(h.id)), [habits, selected])
@@ -123,11 +155,64 @@ export default function PerfilPage() {
     router.push('/login')
   }
 
-  const overallStreak = useMemo(() => {
-    let m = 0
-    for (const id of selected) m = Math.max(m, streaks[id]?.current ?? 0)
-    return m
-  }, [selected, streaks])
+  const overallStreak = useMemo(() => overallStreakValue, [overallStreakValue])
+
+  if (loading) {
+    return (
+      <>
+        <div className="min-h-screen bg-white p-4 pb-20">
+          <div className="max-w-2xl mx-auto py-8">
+            <div className="animate-pulse flex flex-col items-center gap-6 mb-8">
+              <div className="w-24 h-24 rounded-full bg-neutral-100 border border-neutral-200" />
+              <div className="w-48 h-6 bg-neutral-100 rounded" />
+              <div className="w-32 h-4 bg-neutral-100 rounded" />
+            </div>
+
+            <div className="grid grid-cols-3 gap-4 mb-8">
+              <div className="h-20 bg-neutral-100 rounded"></div>
+              <div className="h-20 bg-neutral-100 rounded"></div>
+              <div className="h-20 bg-neutral-100 rounded"></div>
+            </div>
+
+            <div className="mb-8">
+              <div className="h-12 bg-neutral-100 rounded mb-4" />
+              <div className="space-y-3">
+                <div className="h-16 bg-neutral-100 rounded" />
+                <div className="h-16 bg-neutral-100 rounded" />
+                <div className="h-16 bg-neutral-100 rounded" />
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <div className="h-6 bg-neutral-100 rounded mb-4" />
+              <div className="grid grid-cols-4 gap-3">
+                <div className="h-24 bg-neutral-100 rounded" />
+                <div className="h-24 bg-neutral-100 rounded" />
+                <div className="h-24 bg-neutral-100 rounded" />
+                <div className="h-24 bg-neutral-100 rounded opacity-40" />
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <div className="h-6 bg-neutral-100 rounded mb-4" />
+              <div className="space-y-2">
+                <div className="h-12 bg-neutral-100 rounded" />
+                <div className="h-12 bg-neutral-100 rounded" />
+                <div className="h-12 bg-neutral-100 rounded" />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3 max-w-sm mx-auto mb-8">
+              <div className="h-12 bg-neutral-100 rounded" />
+              <div className="h-12 bg-neutral-100 rounded" />
+              <div className="h-12 bg-neutral-100 rounded" />
+            </div>
+          </div>
+        </div>
+        <AppNavbar />
+      </>
+    )
+  }
 
   return (
     <>
@@ -212,7 +297,7 @@ export default function PerfilPage() {
                 <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center text-xl">
                   🔥
                 </div>
-                <div className="text-xs text-center text-neutral-500">Racha 7 días</div>
+                <div className="text-xs text-center text-neutral-500">Racha {overallStreak} días</div>
               </div>
               
               <div className="border border-neutral-200 p-4 flex flex-col items-center gap-2">
@@ -274,7 +359,7 @@ export default function PerfilPage() {
 
       {showModal && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+          className="fixed inset-0 bg-black/70 bg-opacity-50 flex items-center justify-center p-4 z-50"
           onClick={() => setShowModal(false)}
         >
           <div 

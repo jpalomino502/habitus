@@ -51,7 +51,29 @@ export default function RetosPage() {
         <div className="max-w-2xl mx-auto py-8">
           <h1 className="text-2xl tracking-tight text-black mb-8">Reto de hoy</h1>
           {loading ? (
-            <div className="text-sm text-neutral-500">Cargando…</div>
+            <div className="animate-pulse">
+              <div className="block border border-neutral-200 p-6 mb-6">
+                <div className="h-6 bg-neutral-100 rounded w-3/4 mb-3" />
+                <div className="h-4 bg-neutral-100 rounded w-1/2 mb-4" />
+                <div className="h-3 bg-neutral-100 rounded w-1/4" />
+                <div className="w-full py-3 px-4 text-sm text-center bg-neutral-200 mt-4 rounded" />
+              </div>
+
+              <div className="border border-neutral-200">
+                <div className="p-4 flex items-center justify-between border-b border-neutral-100">
+                  <div className="h-4 bg-neutral-100 rounded w-2/3" />
+                  <div className="h-4 bg-neutral-100 rounded w-12" />
+                </div>
+                <div className="p-4 flex items-center justify-between border-b border-neutral-100">
+                  <div className="h-4 bg-neutral-100 rounded w-2/3" />
+                  <div className="h-4 bg-neutral-100 rounded w-12" />
+                </div>
+                <div className="p-4 flex items-center justify-between">
+                  <div className="h-4 bg-neutral-100 rounded w-2/3" />
+                  <div className="h-4 bg-neutral-100 rounded w-12" />
+                </div>
+              </div>
+            </div>
           ) : reto ? (
             <Link href={`/reto/${reto.id}`} className="block border border-neutral-200 p-6 hover:border-neutral-300 transition-colors">
               <div className="flex flex-col gap-6">

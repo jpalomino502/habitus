@@ -26,6 +26,19 @@ export function AppNavbar() {
           </Link>
           
           {/* Clasificación */}
+          {/* Racha */}
+          <Link 
+            href="/racha" 
+            className={`flex flex-col items-center justify-center gap-1 py-2 px-4 transition-colors ${
+              isActive('/racha') ? 'text-black' : 'text-neutral-400'
+            }`}
+          >
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v6l4-4M6 21l6-6 4 4" />
+            </svg>
+            <span className="text-xs">Racha</span>
+          </Link>
+
           <Link 
             href="/clasificacion" 
             className={`flex flex-col items-center justify-center gap-1 py-2 px-4 transition-colors ${

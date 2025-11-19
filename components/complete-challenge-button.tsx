@@ -27,8 +27,24 @@ export function CompleteChallengeButton({ challengeId }: { challengeId: number }
       setLoading(false)
       return
     }
+
+    // Let the DB trigger handle points and streaks atomically.
     setDone(true)
     setLoading(false)
+
+    // Broadcast to the app that a completion occurred so other pages update automatically
+    try {
+      const bc = new BroadcastChannel('habitus')
+      bc.postMessage({ type: 'completion', challengeId })
+      bc.close()
+    } catch (e) {
+      // ignore if BroadcastChannel not available
+    }
+
+    // Ask Next.js to revalidate server-side data where applicable
+    try { router.refresh() } catch (e) {}
+
+    // Refresh data or navigate — keep original navigation behavior
 
     const today = new Date().toISOString().slice(0, 10)
     const { data: userHabits } = await supabase

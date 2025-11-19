@@ -50,12 +50,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-white relative flex items-center justify-center">
-      <div className="absolute top-0 left-0 right-0 pointer-events-none z-0">
-        <svg viewBox="0 0 1440 120" className="w-full h-24 text-neutral-200"><path fill="currentColor" d="M0 60 C 240 10 480 110 720 60 C 960 10 1200 110 1440 60 L 1440 0 L 0 0 Z"/></svg>
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none rotate-180 z-0">
-        <svg viewBox="0 0 1440 120" className="w-full h-24 text-neutral-200"><path fill="currentColor" d="M0 60 C 240 10 480 110 720 60 C 960 10 1200 110 1440 60 L 1440 0 L 0 0 Z"/></svg>
-      </div>
       <div className="w-full max-w-sm flex flex-col gap-8 p-6 relative z-10">
         <div className="flex flex-col gap-2 text-center">
           <h1 className="text-2xl tracking-tight text-black">Iniciar sesión</h1>

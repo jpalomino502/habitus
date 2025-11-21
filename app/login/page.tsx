@@ -51,12 +51,12 @@ export default function LoginPage() {
   return (
 <div className="page max-w-2xl mx-auto py-8 min-h-screen flex flex-col justify-center">
       <div className="container">
-        <div className="hero text-center mb-6">
-          <h1 className="text-2xl tracking-tight text-white">Iniciar sesión</h1>
-          <p className="text-sm text-white/80">Accede a tu cuenta de Habitus</p>
+        <div className=" text-center mb-6">
+          <h1 className="text-2xl tracking-tight text-black">Iniciar sesión</h1>
+          <p className="text-sm text-black/80">Accede a tu cuenta de Habitus</p>
         </div>
 
-        <div className="mx-auto bg-white rounded-xl shadow-md p-6 w-full max-w-md">
+        <div className="mx-auto bg-white p-6 w-full max-w-md">
           <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label className="text-sm text-neutral-600">Correo electrónico</label>

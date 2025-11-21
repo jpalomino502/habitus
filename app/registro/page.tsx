@@ -53,13 +53,13 @@ export default function RegistroPage() {
 
   return (
 <div className="page max-w-2xl mx-auto py-8 min-h-screen flex flex-col justify-center">
-      <div className="container">
-        <div className="hero text-center mb-6">
-          <h1 className="text-2xl tracking-tight text-white">Crear cuenta</h1>
-          <p className="text-sm text-white/80">Únete a Habitus</p>
+      <div className="">
+        <div className=" text-center mb-6">
+          <h1 className="text-2xl tracking-tight text-black">Crear cuenta</h1>
+          <p className="text-sm text-black/80">Únete a Habitus</p>
         </div>
 
-        <div className="mx-auto bg-white rounded-xl shadow-md p-6 w-full max-w-md">
+        <div className="mx-auto p-6 w-full max-w-md">
           <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label className="text-sm text-neutral-600">Correo electrónico</label>

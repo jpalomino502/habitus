@@ -51,11 +51,13 @@ export default function LoginPage() {
   return (
 <div className="page max-w-2xl mx-auto py-8 min-h-screen flex flex-col justify-center">
       <div className="container">
-        <div className="hero text-center">
+        <div className="hero text-center mb-6">
           <h1 className="text-2xl tracking-tight text-white">Iniciar sesión</h1>
           <p className="text-sm text-white/80">Accede a tu cuenta de Habitus</p>
         </div>
-        <div className="p-6 flex flex-col gap-4">
+
+        <div className="mx-auto bg-white rounded-xl shadow-md p-6 w-full max-w-md">
+          <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label className="text-sm text-neutral-600">Correo electrónico</label>
             <input 
@@ -63,7 +65,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="tu@email.com"
-              className="py-3 px-3 text-sm border border-neutral-200 focus:outline-none focus:border-blue-500"
+              className="py-3 px-3 text-sm border border-neutral-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 transition"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -74,18 +76,19 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="py-3 px-3 pr-10 text-sm border border-neutral-200 focus:outline-none focus:border-blue-500 w-full"
+                className="py-3 px-3 pr-10 text-sm border border-neutral-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 transition w-full"
               />
               <button type="button" onClick={() => setShowPassword((v) => !v)} className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-black">
                 {showPassword ? <EyeOff className="w-5 h-5"/> : <Eye className="w-5 h-5"/>}
               </button>
             </div>
           </div>
-          <button onClick={onSubmit} disabled={loading} className="btn-primary mt-2">
+          <button onClick={onSubmit} disabled={loading} className="btn-primary mt-2 w-full">
             {loading ? 'Entrando…' : 'Entrar'}
           </button>
           {error && <div className="text-sm text-red-600 text-center">{error}</div>}
-          <a href="/registro" className="btn-secondary text-center">¿No tienes cuenta? Regístrate</a>
+          <a href="/registro" className="btn-secondary text-center w-full mt-2 inline-block">¿No tienes cuenta? Regístrate</a>
+        </div>
         </div>
       </div>
     </div>

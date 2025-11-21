@@ -325,7 +325,7 @@ export default function PerfilPage() {
                 <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center text-xl">
                   ⭐
                 </div>
-                <div className="text-xs text-center text-neutral-500">50 puntos</div>
+                  <div className="text-xs text-center text-neutral-500">{points} puntos</div>
               </div>
               
               <div className="rounded-xl border border-neutral-200 p-4 flex flex-col items-center gap-2 opacity-40">

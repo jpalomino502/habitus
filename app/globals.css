@@ -16,3 +16,27 @@
     @apply bg-white text-black;
   }
 }
+
+@layer components {
+  .page {
+    @apply min-h-screen bg-white p-4 pb-20;
+  }
+  .container {
+    @apply max-w-2xl mx-auto py-8;
+  }
+  .card {
+    @apply rounded-2xl border border-neutral-200 bg-white shadow-sm;
+  }
+  .hero {
+    @apply rounded-2xl p-6 mb-6 shadow-sm bg-gradient-to-r from-blue-600 to-indigo-500 text-white;
+  }
+  .badge {
+    @apply inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full bg-blue-50 text-blue-700;
+  }
+  .btn-primary {
+    @apply w-full py-4 px-4 text-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors rounded-xl disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500;
+  }
+  .btn-secondary {
+    @apply w-full py-3 px-4 text-sm text-black border border-neutral-200 hover:bg-neutral-50 transition-colors rounded-xl;
+  }
+}

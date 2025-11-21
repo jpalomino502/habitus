@@ -82,7 +82,7 @@ export function CompleteChallengeButton({ challengeId }: { challengeId: number }
       <button
         onClick={onClick}
         disabled={loading || done}
-        className="w-full py-4 px-4 text-sm text-white bg-black hover:bg-neutral-800 transition-colors disabled:opacity-50"
+        className="btn-primary"
       >
         {done ? 'Completado' : loading ? 'Marcando…' : 'Marcar como completado'}
       </button>

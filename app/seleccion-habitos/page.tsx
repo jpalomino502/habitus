@@ -72,15 +72,18 @@ export default function SeleccionHabitosPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white p-4">
-      <div className="max-w-2xl mx-auto py-8">
-        <h1 className="text-2xl tracking-tight text-black mb-6">Selecciona tus hábitos</h1>
+<div className="page max-w-2xl mx-auto py-8 min-h-screen flex flex-col justify-center">
+      <div className="container">
+        <div className="hero">
+          <h1 className="text-2xl tracking-tight text-white">Selecciona tus hábitos</h1>
+          <p className="text-sm text-white/80">Personaliza tu experiencia</p>
+        </div>
         {loading ? (
           <div className="text-sm text-neutral-500">Cargando…</div>
         ) : (
           <div className="flex flex-col gap-3">
             {habits.map((h) => (
-              <label key={h.id} className="flex items-center justify-between border border-neutral-200 p-3">
+              <label key={h.id} className="card p-3 flex items-center justify-between hover:shadow-sm transition-shadow">
                 <div>
                   <div className="text-sm text-black">{h.name}</div>
                   {h.description && <div className="text-xs text-neutral-500">{h.description}</div>}
@@ -97,7 +100,7 @@ export default function SeleccionHabitosPage() {
         <button
           onClick={save}
           disabled={loading}
-          className="w-full py-3 px-4 text-sm text-white bg-black hover:bg-neutral-800 transition-colors mt-6 disabled:opacity-50"
+          className="btn-primary mt-6"
         >
           Guardar
         </button>

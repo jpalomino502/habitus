@@ -4,6 +4,7 @@ import { AppNavbar } from '@/components/app-navbar'
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { User, Trophy, Flame, CalendarDays } from 'lucide-react'
 
 export default function PerfilPage() {
   const router = useRouter()
@@ -216,29 +217,49 @@ export default function PerfilPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-white p-4 pb-20">
-        <div className="max-w-2xl mx-auto py-8">
-          <h1 className="text-2xl tracking-tight text-black mb-8">Perfil</h1>
-          <div className="flex flex-col items-center gap-6 mb-8">
-            <div className="w-24 h-24 rounded-full bg-neutral-100 border border-neutral-200 flex items-center justify-center">
-              <span className="text-3xl text-neutral-400">{username?.[0]?.toUpperCase() || 'U'}</span>
-            </div>
-            <div className="text-center">
-              <div className="text-xl text-black mb-1">{username || 'Usuario'}</div>
-              <div className="text-sm text-neutral-500">{selectedHabits.length} hábitos activos</div>
+      <div className="page max-w-2xl mx-auto py-8">
+        <div className="container">
+          <div className="hero">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center">
+                <User className="w-8 h-8 text-white" />
+              </div>
+              <div className="flex-1">
+                <div className="text-xl text-white">{username || 'Usuario'}</div>
+                <div className="text-sm text-white/80">{selectedHabits.length} hábitos activos</div>
+              </div>
+              <div className="hidden sm:flex items-center gap-2">
+                <span className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full bg-white/20 text-white">
+                  <Flame className="w-4 h-4" />
+                  {overallStreak}d
+                </span>
+                <span className="inline-flex items-center gap-1 text-xs px-3 py-1 rounded-full bg-white/20 text-white">
+                  <Trophy className="w-4 h-4" />
+                  {points} pts
+                </span>
+              </div>
             </div>
           </div>
           
           <div className="grid grid-cols-3 gap-4 mb-8">
-            <div className="border border-neutral-200 p-4 text-center">
+            <div className="rounded-xl border border-neutral-200 p-4 text-center">
+              <div className="mx-auto w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center mb-2">
+                <Trophy className="w-5 h-5 text-blue-700" />
+              </div>
               <div className="text-2xl text-black mb-1">{points}</div>
               <div className="text-xs text-neutral-500">Puntos</div>
             </div>
-            <div className="border border-neutral-200 p-4 text-center">
+            <div className="rounded-xl border border-neutral-200 p-4 text-center">
+              <div className="mx-auto w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center mb-2">
+                <Flame className="w-5 h-5 text-blue-700" />
+              </div>
               <div className="text-2xl text-black mb-1">{overallStreak}</div>
               <div className="text-xs text-neutral-500">Racha días</div>
             </div>
-            <div className="border border-neutral-200 p-4 text-center">
+            <div className="rounded-xl border border-neutral-200 p-4 text-center">
+              <div className="mx-auto w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center mb-2">
+                <CalendarDays className="w-5 h-5 text-blue-700" />
+              </div>
               <div className="text-2xl text-black mb-1">{todayCount}</div>
               <div className="text-xs text-neutral-500">Hoy</div>
             </div>
@@ -249,7 +270,7 @@ export default function PerfilPage() {
               <h2 className="text-sm text-neutral-500">Hábitos activos</h2>
               <button 
                 onClick={() => setShowModal(true)}
-                className="text-xs text-black border border-neutral-200 px-3 py-1.5 hover:bg-neutral-50 transition-colors"
+                className="text-xs text-blue-700 border border-neutral-200 px-3 py-1.5 hover:bg-blue-50 transition-colors"
               >
                 Gestionar hábitos
               </button>
@@ -258,24 +279,24 @@ export default function PerfilPage() {
             {selectedHabits.length > 0 ? (
               <div className="flex flex-col gap-3">
                 {selectedHabits.map((habit) => (
-                  <div key={habit.id} className="border border-neutral-200 p-4 flex items-center justify-between">
+                  <div key={habit.id} className="rounded-xl border border-neutral-200 p-4 flex items-center justify-between hover:shadow-sm transition-shadow">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-neutral-100 flex items-center justify-center text-lg">{habit.name.slice(0,1)}</div>
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center text-lg">{habit.name.slice(0,1)}</div>
                       <div>
                         <div className="text-sm text-black">{habit.name}</div>
                         <div className="text-xs text-neutral-500">Racha {streaks[habit.id]?.current ?? 0}d • Máx {streaks[habit.id]?.longest ?? 0}d</div>
                       </div>
                     </div>
-                    <div className="text-sm text-neutral-500">Activo</div>
+                    <div className="text-xs px-2 py-1 rounded-md bg-blue-50 text-blue-700">Activo</div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="border border-neutral-200 p-8 text-center">
+              <div className="rounded-xl border border-neutral-200 p-8 text-center">
                 <div className="text-sm text-neutral-500 mb-4">No tienes hábitos activos</div>
                 <button 
                   onClick={() => setShowModal(true)}
-                  className="text-sm text-black border border-neutral-200 px-4 py-2 hover:bg-neutral-50 transition-colors"
+                  className="text-sm text-blue-700 border border-neutral-200 px-4 py-2 hover:bg-blue-50 transition-colors"
                 >
                   Agregar hábitos
                 </button>
@@ -286,29 +307,29 @@ export default function PerfilPage() {
           <div className="mb-8">
             <h2 className="text-sm text-neutral-500 mb-4">Logros desbloqueados</h2>
             <div className="grid grid-cols-4 gap-3">
-              <div className="border border-neutral-200 p-4 flex flex-col items-center gap-2">
-                <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center text-xl">
+              <div className="rounded-xl border border-neutral-200 p-4 flex flex-col items-center gap-2">
+                <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center text-xl">
                   🏆
                 </div>
                 <div className="text-xs text-center text-neutral-500">Primera semana</div>
               </div>
               
-              <div className="border border-neutral-200 p-4 flex flex-col items-center gap-2">
-                <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center text-xl">
+              <div className="rounded-xl border border-neutral-200 p-4 flex flex-col items-center gap-2">
+                <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center text-xl">
                   🔥
                 </div>
                 <div className="text-xs text-center text-neutral-500">Racha {overallStreak} días</div>
               </div>
               
-              <div className="border border-neutral-200 p-4 flex flex-col items-center gap-2">
-                <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center text-xl">
+              <div className="rounded-xl border border-neutral-200 p-4 flex flex-col items-center gap-2">
+                <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center text-xl">
                   ⭐
                 </div>
                 <div className="text-xs text-center text-neutral-500">50 puntos</div>
               </div>
               
-              <div className="border border-neutral-200 p-4 flex flex-col items-center gap-2 opacity-40">
-                <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center text-xl">
+              <div className="rounded-xl border border-neutral-200 p-4 flex flex-col items-center gap-2 opacity-40">
+                <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center text-xl">
                   💎
                 </div>
                 <div className="text-xs text-center text-neutral-500">Bloqueado</div>
@@ -318,7 +339,7 @@ export default function PerfilPage() {
 
           <div className="mb-8">
             <h2 className="text-sm text-neutral-500 mb-4">Actividad reciente</h2>
-            <div className="border border-neutral-200 divide-y divide-neutral-200">
+            <div className="rounded-xl border border-neutral-200 divide-y divide-neutral-200">
               {recent.length === 0 ? (
                 <div className="p-4 text-sm text-neutral-500">Sin actividad</div>
               ) : recent.map((r, i) => (
@@ -327,22 +348,14 @@ export default function PerfilPage() {
                     <div className="text-sm text-black mb-1">Completaste "{r.title}"</div>
                     <div className="text-xs text-neutral-500">{new Date(r.completed_at).toLocaleString()}</div>
                   </div>
-                  <div className="text-sm text-neutral-500">+{r.points} pts</div>
+                  <div className="text-xs px-2 py-1 rounded-md bg-blue-50 text-blue-700">+{r.points} pts</div>
                 </div>
               ))}
             </div>
           </div>
           
           <div className="flex flex-col gap-3 max-w-sm mx-auto mb-8">
-            <button className="w-full py-3 px-4 text-sm text-black border border-neutral-200 hover:bg-neutral-50 transition-colors">
-              Editar perfil
-            </button>
-
-            <button className="w-full py-3 px-4 text-sm text-black border border-neutral-200 hover:bg-neutral-50 transition-colors">
-              Configuración
-            </button>
-          
-            <button onClick={logout} className="w-full py-3 px-4 text-sm text-neutral-500 border border-neutral-200 hover:bg-neutral-50 transition-colors">
+            <button onClick={logout} className="w-full py-3 px-4 text-sm text-neutral-100 bg-neutral-900 hover:bg-black transition-colors rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-700">
               Cerrar sesión
             </button>
           </div>
@@ -384,7 +397,7 @@ export default function PerfilPage() {
                 placeholder="Buscar hábitos..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 text-sm border border-neutral-200 focus:outline-none focus:border-neutral-400"
+                className="w-full px-4 py-2 text-sm border border-neutral-200 focus:outline-none focus:border-blue-500"
               />
             </div>
 
@@ -395,7 +408,7 @@ export default function PerfilPage() {
                   {filteredHabits.map((habit) => (
                     <label 
                       key={habit.id}
-                      className="flex items-center justify-between p-3 border border-neutral-200 hover:bg-neutral-50 cursor-pointer transition-colors"
+                      className="flex items-center justify-between p-3 border border-neutral-200 hover:bg-blue-50 cursor-pointer transition-colors"
                     >
                       <span className="text-sm text-black">{habit.name}</span>
                       <input type="checkbox" checked={selected.includes(habit.id)} onChange={() => toggleHabit(habit.id)} className="w-4 h-4" />
@@ -413,7 +426,7 @@ export default function PerfilPage() {
             <div className="p-4 border-t border-neutral-200 flex gap-3">
               <button 
                 onClick={() => setShowModal(false)}
-                className="flex-1 py-2 px-4 text-sm text-neutral-500 border border-neutral-200 hover:bg-neutral-50 transition-colors"
+                className="flex-1 py-2 px-4 text-sm text-neutral-500 border border-neutral-200 hover:bg-blue-50 transition-colors"
               >
                 Cancelar
               </button>

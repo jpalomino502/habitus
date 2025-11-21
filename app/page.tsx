@@ -10,13 +10,13 @@ export default function HomePage() {
         <div className="w-full flex flex-col gap-3">
           <a 
             href="/login" 
-            className="w-full py-3 px-4 text-center text-sm text-black border border-neutral-200 hover:bg-neutral-50 transition-colors"
+            className="btn-secondary text-center"
           >
             Iniciar sesión
           </a>
           <a 
             href="/registro" 
-            className="w-full py-3 px-4 text-center text-sm text-white bg-black hover:bg-neutral-800 transition-colors"
+            className="btn-primary text-center"
           >
             Crear cuenta
           </a>

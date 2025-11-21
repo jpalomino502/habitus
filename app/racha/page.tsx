@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase/client'
 import { AppNavbar } from '@/components/app-navbar'
+import { Flame, TrendingUp, Trophy } from 'lucide-react'
 
 type HabitRow = {
   habit_id: number
@@ -89,34 +90,65 @@ export default function RachaPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-white p-4 pb-20">
-        <div className="max-w-2xl mx-auto py-8">
-          <h1 className="text-2xl tracking-tight text-black mb-6">Rachas</h1>
+      <div className="page max-w-2xl mx-auto py-8">
+        <div className="container">
+          <div className="hero">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-2xl bg-white/20 flex items-center justify-center">
+                <Flame className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h1 className="text-xl text-white">Rachas</h1>
+                <p className="text-sm text-white/80">Mantén tu constancia diaria</p>
+              </div>
+              <span className="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full bg-white/20 text-white">Hábitos <span className="">{rows.length}</span></span>
+            </div>
+          </div>
 
           {loading ? (
             <div className="animate-pulse space-y-3">
-              <div className="h-12 bg-neutral-100 rounded" />
-              <div className="h-12 bg-neutral-100 rounded" />
-              <div className="h-12 bg-neutral-100 rounded" />
+              <div className="h-20 rounded-xl border border-neutral-200 bg-neutral-50" />
+              <div className="h-20 rounded-xl border border-neutral-200 bg-neutral-50" />
+              <div className="h-20 rounded-xl border border-neutral-200 bg-neutral-50" />
             </div>
           ) : rows.length === 0 ? (
             <div className="text-sm text-neutral-500">No tienes hábitos activos. Selecciona hábitos para empezar.</div>
           ) : (
             <div className="flex flex-col gap-3">
               {rows.map((r) => (
-                <div key={r.habit_id} className="border border-neutral-200 p-4 flex items-center justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="text-sm text-black">{r.name}</div>
-                    {r.description && <div className="text-xs text-neutral-500">{r.description}</div>}
-                  </div>
+                <div
+                  key={r.habit_id}
+                  className="group rounded-2xl border border-neutral-200 bg-gradient-to-r from-blue-50 to-white p-4 shadow-sm hover:shadow-md transition-shadow"
+                >
                   <div className="flex items-center gap-4">
-                    <div className="text-sm text-neutral-500 text-center">
-                      <div className="text-black text-lg">{r.current}</div>
-                      <div className="text-xs">Actual</div>
+                    <div className="h-12 w-12 rounded-2xl bg-white/60 flex items-center justify-center shrink-0">
+                      <Flame className="w-6 h-6 text-neutral-500" />
                     </div>
-                    <div className="text-sm text-neutral-500 text-center">
-                      <div className="text-black text-lg">{r.longest}</div>
-                      <div className="text-xs">Máx</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-black  truncate">{r.name}</div>
+                      {r.description && (
+                        <div className="text-xs text-neutral-500">{r.description}</div>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <div className="text-sm text-neutral-500 text-center w-16">
+                        <div className="rounded-full bg-blue-50 text-blue-700 text-base px-3 py-1 ">
+                          {r.current}
+                        </div>
+                        <div className="mt-1 text-[11px] flex items-center justify-center gap-1">
+                          <TrendingUp className="w-3 h-3" />
+                          <span>Actual</span>
+                        </div>
+                      </div>
+                      <div className="text-sm text-neutral-500 text-center w-16">
+                        <div className="rounded-full bg-blue-50 text-blue-700 text-base px-3 py-1 ">
+                          {r.longest}
+                        </div>
+                        <div className="mt-1 text-[11px] flex items-center justify-center gap-1">
+                          <Trophy className="w-3 h-3" />
+                          <span>Récord</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -49,13 +49,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white relative flex items-center justify-center">
-      <div className="w-full max-w-sm flex flex-col gap-8 p-6 relative z-10">
-        <div className="flex flex-col gap-2 text-center">
-          <h1 className="text-2xl tracking-tight text-black">Iniciar sesión</h1>
-          <p className="text-sm text-neutral-500">Accede a tu cuenta de Habitus</p>
+<div className="page max-w-2xl mx-auto py-8 min-h-screen flex flex-col justify-center">
+      <div className="container">
+        <div className="hero text-center">
+          <h1 className="text-2xl tracking-tight text-white">Iniciar sesión</h1>
+          <p className="text-sm text-white/80">Accede a tu cuenta de Habitus</p>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="p-6 flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label className="text-sm text-neutral-600">Correo electrónico</label>
             <input 
@@ -63,7 +63,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="tu@email.com"
-              className="py-3 px-3 text-sm border border-neutral-200 focus:outline-none focus:border-neutral-400"
+              className="py-3 px-3 text-sm border border-neutral-200 focus:outline-none focus:border-blue-500"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -74,18 +74,18 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="py-3 px-3 pr-10 text-sm border border-neutral-200 focus:outline-none focus:border-neutral-400 w-full"
+                className="py-3 px-3 pr-10 text-sm border border-neutral-200 focus:outline-none focus:border-blue-500 w-full"
               />
               <button type="button" onClick={() => setShowPassword((v) => !v)} className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-black">
                 {showPassword ? <EyeOff className="w-5 h-5"/> : <Eye className="w-5 h-5"/>}
               </button>
             </div>
           </div>
-          <button onClick={onSubmit} disabled={loading} className="w-full py-3 px-4 text-sm text-white bg-black hover:bg-neutral-800 transition-colors mt-2 disabled:opacity-50">
+          <button onClick={onSubmit} disabled={loading} className="btn-primary mt-2">
             {loading ? 'Entrando…' : 'Entrar'}
           </button>
           {error && <div className="text-sm text-red-600 text-center">{error}</div>}
-          <a href="/registro" className="text-sm text-neutral-500 hover:text-black text-center">¿No tienes cuenta? Regístrate</a>
+          <a href="/registro" className="btn-secondary text-center">¿No tienes cuenta? Regístrate</a>
         </div>
       </div>
     </div>

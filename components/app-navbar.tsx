@@ -9,14 +9,14 @@ export function AppNavbar() {
   const isActive = (path: string) => pathname === path
   
   return (
-    <nav className="fixed bottom-0 left-0 right-0 border-t border-neutral-200 bg-white z-50">
+    <nav className="fixed bottom-0 left-0 right-0 border-t border-neutral-200 bg-white/90 backdrop-blur z-50">
       <div className="max-w-2xl mx-auto px-4">
         <div className="flex items-center justify-around h-16">
           {/* Retos */}
           <Link 
             href="/retos" 
             className={`flex flex-col items-center justify-center gap-1 py-2 px-4 transition-colors ${
-              isActive('/retos') ? 'text-black' : 'text-neutral-400'
+              isActive('/retos') ? 'text-blue-700 bg-blue-50 rounded-xl' : 'text-neutral-400'
             }`}
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -30,7 +30,7 @@ export function AppNavbar() {
           <Link 
             href="/racha" 
             className={`flex flex-col items-center justify-center gap-1 py-2 px-4 transition-colors ${
-              isActive('/racha') ? 'text-black' : 'text-neutral-400'
+              isActive('/racha') ? 'text-blue-700 bg-blue-50 rounded-xl' : 'text-neutral-400'
             }`}
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -42,7 +42,7 @@ export function AppNavbar() {
           <Link 
             href="/clasificacion" 
             className={`flex flex-col items-center justify-center gap-1 py-2 px-4 transition-colors ${
-              isActive('/clasificacion') ? 'text-black' : 'text-neutral-400'
+              isActive('/clasificacion') ? 'text-blue-700 bg-blue-50 rounded-xl' : 'text-neutral-400'
             }`}
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -55,7 +55,7 @@ export function AppNavbar() {
           <Link 
             href="/perfil" 
             className={`flex flex-col items-center justify-center gap-1 py-2 px-4 transition-colors ${
-              isActive('/perfil') ? 'text-black' : 'text-neutral-400'
+              isActive('/perfil') ? 'text-blue-700 bg-blue-50 rounded-xl' : 'text-neutral-400'
             }`}
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

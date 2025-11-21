@@ -4,6 +4,7 @@ import { AppNavbar } from '@/components/app-navbar'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase/client'
 import { useEffect, useState } from 'react'
+import { Flame, Timer, ChevronRight } from 'lucide-react'
 
 type Reto = { id: number; title: string; description: string | null; duration_min: number; habit_id: number | null }
 
@@ -47,19 +48,27 @@ export default function RetosPage() {
   const reto = retos[0] || null
   return (
     <>
-      <div className="min-h-screen bg-white p-4 pb-20">
-        <div className="max-w-2xl mx-auto py-8">
-          <h1 className="text-2xl tracking-tight text-black mb-8">Reto de hoy</h1>
-          {loading ? (
-            <div className="animate-pulse">
-              <div className="block border border-neutral-200 p-6 mb-6">
-                <div className="h-6 bg-neutral-100 rounded w-3/4 mb-3" />
-                <div className="h-4 bg-neutral-100 rounded w-1/2 mb-4" />
-                <div className="h-3 bg-neutral-100 rounded w-1/4" />
-                <div className="w-full py-3 px-4 text-sm text-center bg-neutral-200 mt-4 rounded" />
+      <div className="page max-w-2xl mx-auto py-8">
+        <div className="container">
+          <div className="hero">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl text-white">Reto de hoy</h1>
+                <p className="text-sm text-white/80">Impulsa tu progreso con un reto diario</p>
               </div>
-
-              <div className="border border-neutral-200">
+              <div className="hidden sm:flex items-center gap-2">
+                <span className="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full bg-white/20 text-white">Disponible <span className="">{retos.length}</span></span>
+              </div>
+            </div>
+          </div>
+          {loading ? (
+            <div className="animate-pulse space-y-4">
+              <div className="rounded-xl border border-neutral-200 p-6 shadow-sm">
+                <div className="h-6 bg-neutral-100 rounded w-3/4 mb-4" />
+                <div className="h-4 bg-neutral-100 rounded w-1/2 mb-6" />
+                <div className="h-10 bg-neutral-100 rounded" />
+              </div>
+              <div className="rounded-xl border border-neutral-200">
                 <div className="p-4 flex items-center justify-between border-b border-neutral-100">
                   <div className="h-4 bg-neutral-100 rounded w-2/3" />
                   <div className="h-4 bg-neutral-100 rounded w-12" />
@@ -75,22 +84,26 @@ export default function RetosPage() {
               </div>
             </div>
           ) : reto ? (
-            <Link href={`/reto/${reto.id}`} className="block border border-neutral-200 p-6 hover:border-neutral-300 transition-colors">
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-2">
-                  <div className="text-lg text-black">{reto.title}</div>
+            <Link href={`/reto/${reto.id}`} className="block rounded-2xl border border-neutral-200 p-6 shadow-sm hover:shadow-md transition-shadow bg-gradient-to-r from-blue-50 to-white">
+              <div className="flex items-start gap-4">
+                <div className="h-12 w-12 rounded-2xl bg-white/60 flex items-center justify-center shrink-0">
+                  <Flame className="w-6 h-6 text-neutral-500" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-lg text-black ">{reto.title}</div>
                   {reto.description && (
-                    <div className="text-sm text-neutral-500">{reto.description}</div>
+                    <div className="text-sm text-neutral-500 mt-1">{reto.description}</div>
                   )}
-                </div>
-                <div className="flex items-center gap-2 pt-2 border-t border-neutral-100">
-                  <svg className="w-4 h-4 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span className="text-sm text-neutral-500">Duración: {reto.duration_min} min</span>
-                </div>
-                <div className="w-full py-3 px-4 text-sm text-center text-white bg-black hover:bg-neutral-800 transition-colors">
-                  Ver detalle
+                  <div className="flex items-center gap-3 pt-4">
+                    <div className="flex items-center gap-1 text-xs text-blue-700">
+                      <Timer className="w-4 h-4 text-blue-700" />
+                      <span>{reto.duration_min} min</span>
+                    </div>
+                    <div className="ml-auto inline-flex items-center gap-2 text-sm rounded-full bg-blue-600 text-white px-3 py-1 hover:bg-blue-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                      <span>Comenzar</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </Link>
@@ -103,15 +116,21 @@ export default function RetosPage() {
           )}
           <div className="mt-8">
             <h2 className="text-sm text-neutral-500 mb-4">Más retos</h2>
-            <div className="border border-neutral-200">
+            <div className="card">
               {retos.slice(1).map((r, index) => (
                 <Link
                   key={r.id}
                   href={`/reto/${r.id}`}
-                  className={`flex items-center justify-between p-4 ${index !== retos.slice(1).length - 1 ? 'border-b border-neutral-100' : ''}`}
+                  className={`flex items-center justify-between p-4 hover:bg-blue-50 transition-colors ${index !== retos.slice(1).length - 1 ? 'border-b border-neutral-100' : ''}`}
                 >
                   <span className="text-sm text-black">{r.title}</span>
-                  <span className="text-xs text-neutral-500">{r.duration_min} min</span>
+                  <span className="flex items-center gap-2">
+                    <span className="text-xs text-blue-700 flex items-center gap-1">
+                      <Timer className="w-3 h-3 text-blue-700" />
+                      {r.duration_min} min
+                    </span>
+                    <ChevronRight className="w-4 h-4 text-blue-400" />
+                  </span>
                 </Link>
               ))}
               {!loading && retos.length <= 1 && (

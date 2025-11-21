@@ -50,13 +50,13 @@ export function ChallengeProgress({ challengeId }: { challengeId: number }) {
   const percent = Math.min(100, Math.round((count / 7) * 100))
 
   return (
-    <div className="border border-neutral-200 p-6 mb-6">
+    <div className="card p-6 mb-6">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm text-neutral-500">Tu progreso esta semana</h3>
         <span className="text-sm text-black">{loading ? '…' : `${count}/7 días`}</span>
       </div>
-      <div className="w-full h-2 bg-neutral-100 overflow-hidden">
-        <div className="h-full bg-black" style={{ width: `${percent}%` }}></div>
+      <div className="w-full h-2 bg-neutral-100 rounded-full overflow-hidden">
+        <div className="h-full bg-blue-600" style={{ width: `${percent}%` }}></div>
       </div>
     </div>
   )
